@@ -53,6 +53,9 @@ neoForge {
 }
 
 processResources {
+    from(rootProject.file('LICENSE')) {
+        into 'META-INF'
+    }
     def properties = [
         version: "${mod_version}+${minecraft_version}",
         mod_id: mod_id,

@@ -31,3 +31,7 @@ Create is required. Download the mod from CurseForge and install it alongside Cr
 4. **Deliver the packages:** attach a Packager to the connected crafters, set a delivery address in the gauge, and route packages with that address to the Packager.
 
 The crafter array does not need to match the recipe's exact shape: a 9×9 array can craft a 5×5 Crushing Wheel recipe. Empty recipe cells stay empty when packages are unpacked.
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0. See [LICENSE](LICENSE).
