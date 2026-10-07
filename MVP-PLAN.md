@@ -1,4 +1,4 @@
-# Create Bigger Crafters — plano de MVP
+# Create: Larger Recipe Gauges — plano de MVP
 
 ## Estado da implementação — 7 de outubro de 2026
 

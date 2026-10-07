@@ -13,11 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Minimal NeoForge entry point for Create Bigger Crafters.
+ * Minimal NeoForge entry point for Create: Larger Recipe Gauges.
  */
 @Mod(CreateBiggerCrafters.MOD_ID)
 public final class CreateBiggerCrafters {
-    public static final String MOD_ID = "create_bigger_crafters";
+    public static final String MOD_ID = "create_larger_recipe_gauges";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public CreateBiggerCrafters(IEventBus modEventBus) {

@@ -212,7 +212,7 @@ public abstract class FactoryPanelScreenMixin {
     private void createBiggerCrafters$labelRecipeCycle(CallbackInfo ci) {
         addressBox.setWidth(108 + extraWidth());
         if (activateCraftingButton != null && createBiggerCrafters$matches.size() > 1)
-            activateCraftingButton.setToolTip(Component.translatable("gui.create_bigger_crafters.cycle_recipe",
+            activateCraftingButton.setToolTip(Component.translatable("gui.create_larger_recipe_gauges.cycle_recipe",
                     createBiggerCrafters$matchIndex + 1, createBiggerCrafters$matches.size()));
     }
 

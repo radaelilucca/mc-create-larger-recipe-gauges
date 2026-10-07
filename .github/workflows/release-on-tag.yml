@@ -61,4 +61,4 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh release view "$RELEASE_TAG" >/dev/null 2>&1 || gh release create "$RELEASE_TAG" --notes-file release-notes.md --title "Create Bigger Crafters $RELEASE_TAG"
+          gh release view "$RELEASE_TAG" >/dev/null 2>&1 || gh release create "$RELEASE_TAG" --notes-file release-notes.md --title "Create: Larger Recipe Gauges $RELEASE_TAG"

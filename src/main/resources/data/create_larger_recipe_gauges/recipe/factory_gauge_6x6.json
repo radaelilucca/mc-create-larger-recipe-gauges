@@ -6,7 +6,7 @@
     { "item": "create:factory_gauge" }
   ],
   "result": {
-    "id": "create_bigger_crafters:factory_gauge_6x6",
+    "id": "create_larger_recipe_gauges:factory_gauge_6x6",
     "count": 1
   }
 }

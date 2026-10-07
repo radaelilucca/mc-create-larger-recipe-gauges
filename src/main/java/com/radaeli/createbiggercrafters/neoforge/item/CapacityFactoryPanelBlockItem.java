@@ -35,16 +35,16 @@ public final class CapacityFactoryPanelBlockItem extends FactoryPanelBlockItem {
                                 TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         String key = capacity == 6
-                ? "item.create_bigger_crafters.factory_gauge_6x6.tooltip"
-                : "item.create_bigger_crafters.factory_gauge_9x9.tooltip";
+                ? "item.create_larger_recipe_gauges.factory_gauge_6x6.tooltip"
+                : "item.create_larger_recipe_gauges.factory_gauge_9x9.tooltip";
         tooltipComponents.add(Component.translatable(key).withStyle(ChatFormatting.GRAY));
     }
 
     @Override
     public Component getName(ItemStack stack) {
         String key = capacity == 6
-                ? "item.create_bigger_crafters.factory_gauge_6x6"
-                : "item.create_bigger_crafters.factory_gauge_9x9";
+                ? "item.create_larger_recipe_gauges.factory_gauge_6x6"
+                : "item.create_larger_recipe_gauges.factory_gauge_9x9";
         return Component.translatable(key);
     }
 

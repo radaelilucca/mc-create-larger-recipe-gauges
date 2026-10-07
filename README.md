@@ -1,6 +1,6 @@
-# Create Bigger Crafters
+# Create: Larger Recipe Gauges
 
-Create Bigger Crafters adds larger Factory Gauges for automating Create Mechanical Crafting recipes with packages.
+Create: Larger Recipe Gauges adds larger Factory Gauges for automating Create Mechanical Crafting recipes with packages.
 
 ## Features
 
@@ -18,6 +18,9 @@ Create is required. Download the mod from CurseForge and install it alongside Cr
 
 ## Getting started
 
-Craft an Expanded Factory Gauge from two Create Factory Gauges. Craft an Industrial Factory Gauge from two Expanded Factory Gauges. Place a gauge and configure a registered Mechanical Crafting recipe in its screen. Connect the Mechanical Crafters into the recipe pattern, then send the ingredients to the connected crafter using Create packages.
+1. **Craft a gauge:** two Create Factory Gauges → one Expanded Factory Gauge (6×6); two Expanded Factory Gauges → one Industrial Factory Gauge (9×9). Both recipes are shapeless.
+2. **Configure the recipe:** set the gauge's output item and connect the ingredient gauges. Open its recipe settings and enable auto-arrangement for a matching Mechanical Crafting recipe.
+3. **Build the crafters:** assemble and power Mechanical Crafters matching the displayed recipe grid. Connect their inventories from behind with a wrench.
+4. **Deliver the packages:** attach a Packager to the connected crafters, set a delivery address in the gauge, and route packages with that address to the Packager.
 
-The Expanded gauge supports patterns up to 6×6; the Industrial gauge supports patterns up to 9×9. Empty cells in a registered recipe stay empty in the crafter layout.
+Use the recipe's actual grid size: Crushing Wheels need 5×5, even with a 6×6 gauge. Empty recipe cells stay empty when packages are unpacked.

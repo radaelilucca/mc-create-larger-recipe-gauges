@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Create Bigger Crafters: Build",
+      "label": "Create: Larger Recipe Gauges: Build",
       "type": "process",
       "command": "${workspaceFolder}\\gradlew.bat",
       "args": [
@@ -26,7 +26,7 @@
       }
     },
     {
-      "label": "Create Bigger Crafters: Run NeoForge Client",
+      "label": "Create: Larger Recipe Gauges: Run NeoForge Client",
       "type": "process",
       "command": "${workspaceFolder}\\gradlew.bat",
       "args": [
