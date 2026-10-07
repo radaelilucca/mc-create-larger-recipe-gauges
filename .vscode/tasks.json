@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Create Bigger Crafters: Build",
+      "type": "process",
+      "command": "${workspaceFolder}\\gradlew.bat",
+      "args": [
+        "--no-daemon",
+        "--no-parallel",
+        "build",
+        "--console=plain"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"
+        }
+      },
+      "group": "build",
+      "problemMatcher": "$gradle",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Create Bigger Crafters: Run NeoForge Client",
+      "type": "process",
+      "command": "${workspaceFolder}\\gradlew.bat",
+      "args": [
+        "--no-daemon",
+        "--no-parallel",
+        "runClient",
+        "--console=plain"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"
+        }
+      },
+      "group": "test",
+      "problemMatcher": "$gradle",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ]
+}

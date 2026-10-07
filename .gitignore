@@ -1,0 +1,8 @@
+.gradle/
+.gradle-cache/
+.gradle-create-bigger-crafters/
+build/
+runs/
+.idea/
+*.iml
+out/
