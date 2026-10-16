@@ -1,82 +1,28 @@
-plugins {
-    id 'net.neoforged.moddev' version '2.0.144'
+apply plugin: 'base'
+
+tasks.register('buildAll') {
+    group = 'build'
+    description = 'Builds the Forge and NeoForge variants sequentially.'
+    dependsOn ':forge1201:build', ':neoforge:build'
+    project(':neoforge').tasks.named('build').configure { mustRunAfter ':forge1201:build' }
 }
 
-repositories {
-    maven { url = 'https://maven.createmod.net' }
-    maven { url = 'https://maven.ithundxr.dev/snapshots' }
+tasks.register('verifyAll') {
+    group = 'verification'
+    description = 'Runs available verification tasks for both loaders.'
+    dependsOn ':forge1201:check', ':neoforge:check'
+    project(':neoforge').tasks.named('check').configure { mustRunAfter ':forge1201:check' }
 }
 
-dependencies {
-    compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    runtimeOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
-    runtimeOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
-    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
-    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
-    compileOnly("com.tterrag.registrate:Registrate:${registrate_version}")
-    runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
-}
+tasks.register('runForgeClient') { dependsOn ':forge1201:runClient' }
+tasks.register('runNeoForgeClient') { dependsOn ':neoforge:runClient' }
+tasks.register('runClient') { dependsOn 'runNeoForgeClient' }
+tasks.register('runForgeServer') { dependsOn ':forge1201:runServer' }
+tasks.register('runNeoForgeServer') { dependsOn ':neoforge:runServer' }
+tasks.register('runServer') { dependsOn 'runNeoForgeServer' }
+tasks.register('runForgeGameTests') { dependsOn ':forge1201:runGameTestServer' }
+tasks.register('runNeoForgeGameTests') { dependsOn ':neoforge:runGameTestServer' }
 
-group = mod_group_id
-version = mod_version
+tasks.named('build').configure { dependsOn 'buildAll' }
+tasks.named('check').configure { dependsOn 'verifyAll' }
 
-base {
-    archivesName = "${mod_id}-neoforge"
-}
-
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
-    withSourcesJar()
-}
-
-neoForge {
-    version = neoforge_version
-
-    runs {
-        client {
-            client()
-            gameDirectory = project.file('runs/client')
-        }
-        server {
-            server()
-            gameDirectory = project.file('runs/server')
-            programArgument '--nogui'
-        }
-    }
-
-    mods {
-        "${mod_id}" {
-            sourceSet sourceSets.main
-        }
-    }
-}
-
-processResources {
-    from(rootProject.file('LICENSE')) {
-        into 'META-INF'
-    }
-    def properties = [
-        version: "${mod_version}+${minecraft_version}",
-        mod_id: mod_id,
-        mod_name: mod_name,
-        mod_description: mod_description,
-        mod_authors: mod_authors,
-        mod_license: mod_license,
-        minecraft_version: minecraft_version,
-        neoforge_version: neoforge_version,
-        neoforge_loader_version_range: neoforge_loader_version_range
-    ]
-    inputs.properties(properties)
-    filesMatching('META-INF/neoforge.mods.toml') {
-        expand(properties)
-    }
-    filesMatching('pack.mcmeta') {
-        expand(properties)
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-    options.release = java_version as int
-}

@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.EnumMap;
 
@@ -25,7 +26,15 @@ public abstract class FactoryPanelBlockEntityMixin implements FactoryPanelBlockE
 
     @Override
     public void createBiggerCrafters$setCapacity(PanelSlot slot, int capacity) {
+        if (capacity != 3 && capacity != 6 && capacity != 9)
+            throw new IllegalArgumentException("Factory gauge capacity must be 3, 6 or 9");
         createBiggerCrafters$capacities.put(slot, capacity);
+    }
+
+    @Inject(method = "removePanel", at = @At("RETURN"))
+    private void createBiggerCrafters$clearRemovedPanelCapacity(PanelSlot slot, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValueZ())
+            createBiggerCrafters$capacities.remove(slot);
     }
 
     @Inject(method = "write", at = @At("TAIL"))

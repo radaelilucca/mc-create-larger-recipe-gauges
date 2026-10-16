@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0] - 2026-10-15
+
+### Added
+
+- Added a Forge 1.20.1 version for Create 6.0.8 alongside the NeoForge 1.21.1 version.
+- Added separate loader builds, run tasks, compatibility metadata, and Portuguese developer documentation.
+
 ## [0.1.0] - 2026-10-07
 
 ### Added

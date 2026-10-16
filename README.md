@@ -15,11 +15,10 @@ Create: Larger Recipe Gauges adds larger Factory Gauges for automating Create Me
   <img src="https://github.com/radaelilucca/mc-create-larger-recipe-gauges/blob/main/docs/gallery/potato-cannon.png?raw=true" alt="Potato Cannon configured in the gauge" width="49%">
 </p>
 
-## Requirements
+## Supported versions
 
-- Minecraft 1.21.1
-- NeoForge 21.1.236 or newer in the 21.1 series
-- Create 6.0.10 for Minecraft 1.21.1
+- Minecraft 1.21.1 with NeoForge 21.1.236 and Create 6.0.10.
+- Minecraft 1.20.1 with Forge 47.4.0 and Create 6.0.8.
 
 Create is required. Download the mod from CurseForge and install it alongside Create in your NeoForge `mods` folder.
 

@@ -43,7 +43,9 @@ jobs:
           set -euo pipefail
           [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
           chmod +x ./gradlew
-          ./gradlew -Pmod_version="${RELEASE_TAG#v}" build --no-daemon --no-parallel --console=plain
+          ./gradlew -Pmod_version="${RELEASE_TAG#v}" buildAll verifyAll --no-daemon --no-parallel --console=plain
+          find forge1201/build/libs neoforge/build/libs -maxdepth 1 -type f \( -name '*.jar' \) ! -name '*-dev.jar' -print0 | xargs -0 -r sha256sum > checksums.sha256
+          test -s checksums.sha256
       - name: Prepare player-facing release notes
         shell: bash
         run: |
@@ -62,3 +64,6 @@ jobs:
         run: |
           set -euo pipefail
           gh release view "$RELEASE_TAG" >/dev/null 2>&1 || gh release create "$RELEASE_TAG" --notes-file release-notes.md --title "Create: Larger Recipe Gauges $RELEASE_TAG"
+          mapfile -t artifacts < <(find forge1201/build/libs neoforge/build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-dev.jar' -print | sort)
+          test "${#artifacts[@]}" -gt 0
+          gh release upload "$RELEASE_TAG" "${artifacts[@]}" checksums.sha256 --clobber

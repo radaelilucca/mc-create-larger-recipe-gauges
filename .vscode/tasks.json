@@ -2,52 +2,33 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Create: Larger Recipe Gauges: Build",
+      "label": "Create: Larger Recipe Gauges: Build All",
       "type": "process",
       "command": "${workspaceFolder}\\gradlew.bat",
-      "args": [
-        "--no-daemon",
-        "--no-parallel",
-        "build",
-        "--console=plain"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}",
-        "env": {
-          "GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"
-        }
-      },
-      "group": "build",
+      "args": ["--no-daemon", "--no-parallel", "buildAll", "--console=plain"],
+      "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}},
+      "group": {"kind": "build", "isDefault": true},
       "problemMatcher": "$gradle",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": true
-      }
+      "presentation": {"reveal": "always", "panel": "dedicated", "clear": true}
     },
     {
-      "label": "Create: Larger Recipe Gauges: Run NeoForge Client",
-      "type": "process",
-      "command": "${workspaceFolder}\\gradlew.bat",
-      "args": [
-        "--no-daemon",
-        "--no-parallel",
-        "runClient",
-        "--console=plain"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}",
-        "env": {
-          "GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"
-        }
-      },
-      "group": "test",
-      "problemMatcher": "$gradle",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": true
-      }
-    }
+      "label": "Create: Larger Recipe Gauges: Build Forge",
+      "type": "process", "command": "${workspaceFolder}\\gradlew.bat",
+      "args": ["--no-daemon", "--no-parallel", ":forge1201:build", "--console=plain"],
+      "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}},
+      "problemMatcher": "$gradle"
+    },
+    {
+      "label": "Create: Larger Recipe Gauges: Build NeoForge",
+      "type": "process", "command": "${workspaceFolder}\\gradlew.bat",
+      "args": ["--no-daemon", "--no-parallel", ":neoforge:build", "--console=plain"],
+      "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}},
+      "problemMatcher": "$gradle"
+    },
+    {"label": "Create: Larger Recipe Gauges: Run Forge Client", "type": "process", "command": "${workspaceFolder}\\gradlew.bat", "args": ["--no-daemon", "--no-parallel", "runForgeClient", "--console=plain"], "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}}, "problemMatcher": "$gradle", "group": "test"},
+    {"label": "Create: Larger Recipe Gauges: Run NeoForge Client", "type": "process", "command": "${workspaceFolder}\\gradlew.bat", "args": ["--no-daemon", "--no-parallel", "runNeoForgeClient", "--console=plain"], "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}}, "problemMatcher": "$gradle", "group": "test"},
+    {"label": "Create: Larger Recipe Gauges: Run Forge Server", "type": "process", "command": "${workspaceFolder}\\gradlew.bat", "args": ["--no-daemon", "--no-parallel", "runForgeServer", "--console=plain"], "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}}, "problemMatcher": "$gradle"},
+    {"label": "Create: Larger Recipe Gauges: Run NeoForge Server", "type": "process", "command": "${workspaceFolder}\\gradlew.bat", "args": ["--no-daemon", "--no-parallel", "runNeoForgeServer", "--console=plain"], "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}}, "problemMatcher": "$gradle"},
+    {"label": "Create: Larger Recipe Gauges: Verify All", "type": "process", "command": "${workspaceFolder}\\gradlew.bat", "args": ["--no-daemon", "--no-parallel", "verifyAll", "--console=plain"], "options": {"cwd": "${workspaceFolder}", "env": {"GRADLE_USER_HOME": "${workspaceFolder}\\.gradle-create-bigger-crafters"}}, "problemMatcher": "$gradle"}
   ]
 }
