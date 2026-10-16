@@ -4,8 +4,12 @@
 
 ### Added
 
-- Added a Forge 1.20.1 version for Create 6.0.8 alongside the NeoForge 1.21.1 version.
-- Added separate loader builds, run tasks, compatibility metadata, and Portuguese developer documentation.
+- Added a Forge 1.20.1 version for Create 6.0.8.
+
+### Fixed
+
+- Fixed pick block not returning the selected 6×6 or 9×9 gauge.
+- Fixed placing a custom gauge into an occupied Factory Gauge block.
 
 ## [0.1.0] - 2026-10-07
 
