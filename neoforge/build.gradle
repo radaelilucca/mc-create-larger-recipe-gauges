@@ -92,3 +92,18 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.release = java_version as int
 }
+
+sourceSets {
+    gaugeTest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+// Opt in only for verification runs; these classes and structures are excluded from the mod JAR.
+if (project.hasProperty('gaugeTests')) {
+    neoForge.mods.named(mod_id) { sourceSet sourceSets.gaugeTest }
+    neoForge.runs.named('gameTestServer') {
+        systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+    }
+}

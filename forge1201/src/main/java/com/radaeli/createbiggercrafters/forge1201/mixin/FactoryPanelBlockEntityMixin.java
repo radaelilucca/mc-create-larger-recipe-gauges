@@ -1,56 +1,59 @@
 package com.radaeli.createbiggercrafters.forge1201.mixin;
 
+import com.radaeli.createbiggercrafters.forge1201.FactoryPanelBehaviourExtension;
 import com.radaeli.createbiggercrafters.forge1201.FactoryPanelBlockEntityExtension;
+import com.radaeli.createbiggercrafters.forge1201.GaugeVariant;
+import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBehaviour;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlock.PanelSlot;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlockEntity;
+import com.simibubi.create.foundation.utility.CreateLang;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.EnumMap;
+import java.util.List;
 
 @Mixin(value = FactoryPanelBlockEntity.class, remap = false)
 public abstract class FactoryPanelBlockEntityMixin implements FactoryPanelBlockEntityExtension {
-    @Unique
-    private final EnumMap<PanelSlot, Integer> createBiggerCrafters$capacities = new EnumMap<>(PanelSlot.class);
+    @Shadow public EnumMap<PanelSlot, FactoryPanelBehaviour> panels;
 
     @Override
     public int createBiggerCrafters$getCapacity(PanelSlot slot) {
-        return createBiggerCrafters$capacities.getOrDefault(slot, 3);
+        FactoryPanelBehaviour panel = panels.get(slot);
+        return panel == null ? 3 : ((FactoryPanelBehaviourExtension) panel).createBiggerCrafters$getCapacity();
     }
 
     @Override
     public void createBiggerCrafters$setCapacity(PanelSlot slot, int capacity) {
-        if (capacity != 3 && capacity != 6 && capacity != 9)
-            throw new IllegalArgumentException("Factory gauge capacity must be 3, 6 or 9");
-        createBiggerCrafters$capacities.put(slot, capacity);
+        ((FactoryPanelBehaviourExtension) panels.get(slot)).createBiggerCrafters$setCapacity(capacity);
     }
 
-    @Inject(method = "removePanel", remap = false, at = @At("RETURN"))
-    private void createBiggerCrafters$clearRemovedPanelCapacity(PanelSlot slot, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValueZ())
-            createBiggerCrafters$capacities.remove(slot);
+    @Inject(method = "read", at = @At("TAIL"))
+    private void createBiggerCrafters$migrateLegacyCapacities(CompoundTag tag, boolean clientPacket,
+                                                              CallbackInfo ci) {
+        CompoundTag legacy = tag.getCompound("CreateBiggerCraftersCapacities");
+        panels.forEach((slot, panel) -> {
+            if (panel.isActive() && legacy.contains(slot.name())
+                    && !tag.getCompound(CreateLang.asId(slot.name())).contains(GaugeVariant.NBT_KEY))
+                createBiggerCrafters$setCapacity(slot, legacy.getInt(slot.name()));
+        });
     }
 
-    @Inject(method = "write", remap = false, at = @At("TAIL"))
-    private void createBiggerCrafters$writeCapacity(CompoundTag tag, boolean clientPacket, CallbackInfo ci) {
-        CompoundTag capacities = new CompoundTag();
-        createBiggerCrafters$capacities.forEach((slot, capacity) -> capacities.putInt(slot.name(), capacity));
-        tag.put("CreateBiggerCraftersCapacities", capacities);
-    }
-
-    @Inject(method = "read", remap = false, at = @At("TAIL"))
-    private void createBiggerCrafters$readCapacity(CompoundTag tag, boolean clientPacket, CallbackInfo ci) {
-        createBiggerCrafters$capacities.clear();
-        CompoundTag capacities = tag.getCompound("CreateBiggerCraftersCapacities");
-        for (PanelSlot slot : PanelSlot.values()) {
-            if (capacities.contains(slot.name()))
-                createBiggerCrafters$capacities.put(slot, capacities.getInt(slot.name()));
-        }
+    @Redirect(method = "destroy", at = @At(value = "INVOKE", remap = true,
+            target = "Lnet/minecraft/world/level/block/Block;popResource(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/item/ItemStack;)V"))
+    private void createBiggerCrafters$dropRemainingGaugeVariants(Level level, BlockPos pos, ItemStack ignored) {
+        List<ItemStack> gauges = GaugeVariant.activeStacks((FactoryPanelBlockEntity) (Object) this);
+        // The loot table supplies the first active slot. Create supplies the rest here.
+        for (int index = 1; index < gauges.size(); index++)
+            Block.popResource(level, pos, gauges.get(index));
     }
 }
-

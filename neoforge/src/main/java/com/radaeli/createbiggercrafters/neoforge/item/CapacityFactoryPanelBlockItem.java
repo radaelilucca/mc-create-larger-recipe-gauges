@@ -1,21 +1,12 @@
 package com.radaeli.createbiggercrafters.neoforge.item;
 
-import com.radaeli.createbiggercrafters.neoforge.FactoryPanelBlockEntityExtension;
-import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlockEntity;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlockItem;
-import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlock;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.HitResult;
 
 import java.util.Map;
 import java.util.List;
@@ -58,21 +49,7 @@ public final class CapacityFactoryPanelBlockItem extends FactoryPanelBlockItem {
         // The canonical mapping belongs to Create and must survive variant removal.
     }
 
-    @Override
-    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, Player player, ItemStack stack,
-                                                  BlockState state) {
-        boolean updated = super.updateCustomBlockEntityTag(pos, level, player, stack, state);
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FactoryPanelBlockEntity panelBlockEntity
-                && panelBlockEntity instanceof FactoryPanelBlockEntityExtension extension) {
-            if (player != null) {
-                double reach = player.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE) + 1;
-                HitResult hit = player.pick(reach, 1, false);
-                FactoryPanelBlock.PanelSlot slot = FactoryPanelBlock.getTargetedSlot(pos, state, hit.getLocation());
-                extension.createBiggerCrafters$setCapacity(slot, capacity);
-            }
-            panelBlockEntity.setChanged();
-            panelBlockEntity.sendData();
-        }
-        return updated;
+    public int capacity() {
+        return capacity;
     }
 }

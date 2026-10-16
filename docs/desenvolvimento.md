@@ -14,6 +14,7 @@ caches dos loaders:
 .\gradlew.bat runForgeServer
 .\gradlew.bat runNeoForgeServer
 .\gradlew.bat verifyAll
+.\gradlew.bat -PgaugeTests runForgeGameTests runNeoForgeGameTests
 ```
 
 Os diretórios de execução e resultados são separados em `forge1201/runs` e
@@ -24,13 +25,12 @@ Os diretórios de execução e resultados são separados em `forge1201/runs` e
 | Camada | Evidência atual |
 |---|---|
 | Dependências Create | JAR local Create 1.20.1 6.0.8 inspecionado; NeoForge usa Create 6.0.10 configurado no Gradle. |
-| Build Forge e NeoForge | Pendente: a tentativa local não conseguiu conectar ao daemon Gradle. |
-| Boot cliente/servidor | Pendente. |
+| Build Forge e NeoForge | `buildAll` aprovado em 16/10/2026 após as correções de identidade dos gauges. |
+| Boot cliente/servidor | Servidores GameTest aprovados e clientes dos dois loaders abertos no mundo existente nesta revisão. |
 | Receitas maiores e automação completa por pacotes | Pendente. |
-| Persistência, multiplayer, wrench e drops | Pendente. |
-| Capturas nos dois loaders e revisão manual | Pendente. |
+| Persistência, wrench e drops | 12 GameTests por loader aprovados; [cobertura detalhada](identidade-dos-gauges.md). Multiplayer real pendente. |
+| Revisão manual por Computer Use | Forge: colocação conjunta, pickblock, wrench em Survival e persistência aprovados. NeoForge: sintonização e colocação conjunta aprovadas; sessão interrompida a pedido do usuário. |
 
 Uma verificação é considerada aprovada somente depois de produzir relatório novo
 para o loader correspondente. Inicialização e compilação não substituem a
 validação manual do fluxo de criação.
-

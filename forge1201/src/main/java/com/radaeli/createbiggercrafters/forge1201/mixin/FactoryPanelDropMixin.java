@@ -1,10 +1,13 @@
 package com.radaeli.createbiggercrafters.forge1201.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import com.radaeli.createbiggercrafters.forge1201.FactoryPanelBlockEntityExtension;
-import com.radaeli.createbiggercrafters.forge1201.ModItems;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import com.radaeli.createbiggercrafters.forge1201.GaugeVariant;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlock;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelBlockEntity;
+import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,33 +15,25 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(value = FactoryPanelBlock.class, remap = false)
 public abstract class FactoryPanelDropMixin {
-    @Redirect(method = "lambda$tryDestroySubPanelFirst$3", remap = false, at = @At(value = "INVOKE",
-            target = "Lcom/tterrag/registrate/util/entry/BlockEntry;asStack()Lnet/minecraft/world/item/ItemStack;"))
-    private static ItemStack createBiggerCrafters$dropTheMatchingGauge(
-            com.tterrag.registrate.util.entry.BlockEntry<?> ignored,
-            @Local(argsOnly = true) FactoryPanelBlock.PanelSlot slot,
-            @Local(argsOnly = true) FactoryPanelBlockEntity panel) {
-        return createBiggerCrafters$gaugeStack(slot, panel);
+    @WrapOperation(method = {"lambda$tryDestroySubPanelFirst$3", "lambda$onSneakWrenched$0"},
+            at = @At(value = "INVOKE",
+                    target = "Lcom/simibubi/create/content/logistics/factoryBoard/FactoryPanelBlockEntity;removePanel(Lcom/simibubi/create/content/logistics/factoryBoard/FactoryPanelBlock$PanelSlot;)Z"))
+    private static boolean createBiggerCrafters$captureRemovedGauge(FactoryPanelBlockEntity panel,
+            FactoryPanelBlock.PanelSlot slot, Operation<Boolean> original,
+            @Share("removedGauge") LocalRef<ItemStack> removedGauge) {
+        // Capture before removePanel disables the behaviour and clears its identity.
+        ItemStack gauge = GaugeVariant.fromPanel(panel, slot).stack();
+        boolean removed = original.call(panel, slot);
+        if (removed)
+            removedGauge.set(gauge);
+        return removed;
     }
 
-    @Redirect(method = "lambda$onSneakWrenched$0", remap = false, at = @At(value = "INVOKE",
-            target = "Lcom/tterrag/registrate/util/entry/BlockEntry;asStack()Lnet/minecraft/world/item/ItemStack;"))
-    private static ItemStack createBiggerCrafters$dropTheMatchingWrenchedGauge(
-            com.tterrag.registrate.util.entry.BlockEntry<?> ignored,
-            @Local(argsOnly = true) FactoryPanelBlock.PanelSlot slot,
-            @Local(argsOnly = true) FactoryPanelBlockEntity panel) {
-        return createBiggerCrafters$gaugeStack(slot, panel);
-    }
-
-    @org.spongepowered.asm.mixin.Unique
-    private static ItemStack createBiggerCrafters$gaugeStack(FactoryPanelBlock.PanelSlot slot,
-                                                               FactoryPanelBlockEntity panel) {
-        int capacity = ((FactoryPanelBlockEntityExtension) panel).createBiggerCrafters$getCapacity(slot);
-        if (capacity == 6)
-            return ModItems.FACTORY_GAUGE_6X6.get().getDefaultInstance();
-        if (capacity == 9)
-            return ModItems.FACTORY_GAUGE_9X9.get().getDefaultInstance();
-        return com.simibubi.create.AllBlocks.FACTORY_GAUGE.asStack();
+    @Redirect(method = {"lambda$tryDestroySubPanelFirst$3", "lambda$onSneakWrenched$0"},
+            at = @At(value = "INVOKE",
+                    target = "Lcom/tterrag/registrate/util/entry/BlockEntry;asStack()Lnet/minecraft/world/item/ItemStack;"))
+    private static ItemStack createBiggerCrafters$returnCapturedGauge(BlockEntry<?> ignored,
+            @Share("removedGauge") LocalRef<ItemStack> removedGauge) {
+        return java.util.Objects.requireNonNull(removedGauge.get(), "Missing removed gauge identity");
     }
 }
-

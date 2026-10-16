@@ -40,7 +40,7 @@ minecraft {
         }
         gameTestServer {
             workingDirectory project.file('runs/gametest')
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods { "${mod_id}" { source sourceSets.main } }
@@ -98,3 +98,17 @@ jar {
     finalizedBy 'reobfJar'
 }
 
+sourceSets {
+    gaugeTest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+// Opt in only for verification runs; these classes and structures are excluded from the mod JAR.
+if (project.hasProperty('gaugeTests')) {
+    minecraft.runs.gameTestServer {
+        property 'forge.enabledGameTestNamespaces', mod_id
+        mods { "${mod_id}" { source sourceSets.gaugeTest } }
+    }
+}

@@ -5,12 +5,17 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "FactoryPanelBlockEntityMixin",
-    "FactoryPanelDropMixin"
+    "FactoryPanelDropMixin",
+    "FactoryPanelPlacementMixin",
+    "FactoryPanelBehaviourMixin",
+    "FactoryPanelLootMixin",
+    "PackagerGaugeInteractionMixin"
   ],
   "client": [
     "AbstractSimiScreenMixin",
     "FactoryPanelScreenMixin",
-    "FactoryPanelModelMixin"
+    "FactoryPanelModelMixin",
+    "FactoryPanelPickBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

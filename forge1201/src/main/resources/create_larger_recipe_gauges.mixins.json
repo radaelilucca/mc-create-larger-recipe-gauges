@@ -4,7 +4,21 @@
   "package": "com.radaeli.createbiggercrafters.forge1201.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "create_larger_recipe_gauges.refmap.json",
-  "mixins": ["FactoryPanelBlockEntityMixin", "FactoryPanelDropMixin"],
-  "client": ["AbstractSimiScreenMixin", "FactoryPanelScreenMixin", "FactoryPanelModelMixin"],
-  "injectors": {"defaultRequire": 1}
+  "mixins": [
+    "FactoryPanelBlockEntityMixin",
+    "FactoryPanelDropMixin",
+    "FactoryPanelPlacementMixin",
+    "FactoryPanelBehaviourMixin",
+    "FactoryPanelLootMixin",
+    "PackagerGaugeInteractionMixin"
+  ],
+  "client": [
+    "AbstractSimiScreenMixin",
+    "FactoryPanelScreenMixin",
+    "FactoryPanelModelMixin",
+    "FactoryPanelPickBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
