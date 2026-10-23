@@ -208,6 +208,54 @@ public abstract class FactoryPanelScreenMixin {
         return usedItems.size() >= inputItems.size();
     }
 
+    @ModifyArg(method = "sendIt", remap = false, at = @At(value = "INVOKE",
+            target = "Lcom/simibubi/create/content/logistics/factoryBoard/FactoryPanelConfigurationPacket;<init>(Lcom/simibubi/create/content/logistics/factoryBoard/FactoryPanelPosition;Ljava/lang/String;Ljava/util/Map;Ljava/util/List;IILcom/simibubi/create/content/logistics/factoryBoard/FactoryPanelPosition;ZZZ)V"), index = 3)
+    private List<ItemStack> createBiggerCrafters$padCraftingArrangement(List<ItemStack> arrangement) {
+        if (!(availableCraftingRecipe instanceof ShapedRecipe shaped))
+            return arrangement;
+
+        int capacity = panelCapacity();
+        int width = shaped.getWidth();
+        int height = shaped.getHeight();
+        if (capacity <= 3 || width > capacity || height > capacity)
+            return arrangement;
+
+        int sourceColumns = width;
+        int sourceRows = height;
+        if (arrangement.size() != sourceColumns * sourceRows) {
+            if (width <= 3 && height <= 3 && arrangement.size() == 9) {
+                sourceColumns = 3;
+                sourceRows = 3;
+            } else if (width <= 3 && arrangement.size() >= 3 * height
+                    && arrangement.size() <= 3 * (height + 1)) {
+                sourceColumns = 3;
+                sourceRows = (arrangement.size() + 2) / 3;
+            } else {
+                return arrangement;
+            }
+        }
+        if (sourceColumns > capacity || sourceRows > capacity)
+            return arrangement;
+        if (sourceColumns == capacity && sourceRows == capacity)
+            return arrangement;
+
+        List<ItemStack> padded = new ArrayList<>(capacity * capacity);
+        for (int i = 0; i < capacity * capacity; i++)
+            padded.add(ItemStack.EMPTY);
+
+        int left = (capacity - sourceColumns) / 2;
+        int top = (capacity - sourceRows) / 2;
+        for (int row = 0; row < sourceRows; row++) {
+            for (int column = 0; column < sourceColumns; column++) {
+                int source = row * sourceColumns + column;
+                int target = (top + row) * capacity + left + column;
+                if (source < arrangement.size())
+                    padded.set(target, arrangement.get(source));
+            }
+        }
+        return padded;
+    }
+
     @Inject(method = "init", remap = false, at = @At("TAIL"))
     private void createBiggerCrafters$labelRecipeCycle(CallbackInfo ci) {
         addressBox.setWidth(108 + extraWidth());

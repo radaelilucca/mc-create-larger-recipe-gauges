@@ -10,7 +10,9 @@
     "FactoryPanelPlacementMixin",
     "FactoryPanelBehaviourMixin",
     "FactoryPanelLootMixin",
-    "PackagerGaugeInteractionMixin"
+    "PackagerGaugeInteractionMixin",
+    "CrafterUnpackingHandlerMixin",
+    "MechanicalCrafterInventoryAccessor"
   ],
   "client": [
     "AbstractSimiScreenMixin",

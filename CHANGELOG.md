@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1] - 2026-10-23
+
+### Fixed
+
+- Fixed package crafting with larger and irregular mechanical crafter arrays when there are extra crafter positions around the recipe.
+
 ## [0.2.0] - 2026-10-15
 
 ### Added
